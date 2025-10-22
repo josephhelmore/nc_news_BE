@@ -2,7 +2,9 @@ const db = require("../connection");
 const format = require("pg-format");
 const { convertTimestampToDate, formatData } = require("./utils");
 
+
 const seed = ({ topicData, userData, articleData, commentData }) => {
+
   return db
     .query(`DROP TABLE IF EXISTS topics, users, articles, comments;`)
     .then(() => {
