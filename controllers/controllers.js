@@ -1,26 +1,27 @@
 const db = require("../db/connection");
+const { fetchArticles, fetchTopics, fetchUsers } = require("../models/models");
 
 const getTopics = (req, res) => {
-  return db.query(`SELECT * FROM topics`).then(({ rows }) => {
-    res.status(200).send({ topics: rows });
+  fetchTopics().then((topics) => {
+    res.status(200).send({ topics });
   });
 };
 
 const getArticles = (req, res) => {
-  const rowsData = db
-    .query(
-      `SELECT articles.article_id, articles.title, articles.topic, articles.author, articles.created_at, articles.votes, articles.article_img_url, COUNT(comments.comment_id) :: INT AS comment_count  FROM articles
-      LEFT JOIN comments ON articles.article_id = comments.article_id
-      GROUP BY articles.article_id
-      ORDER BY articles.created_at DESC;`
-    )
-    .then(({ rows }) => {
-      res.status(200).send({ articles: rows });
-    })
-  return rowsData;
+  fetchArticles().then((articles) => {
+    res.status(200).send({ articles });
+  });
+};
+
+const getUsers = (req, res) => {
+  fetchUsers().then((users) => {
+    console.log(users)
+    res.status(200).send({ users });
+  });
 };
 
 module.exports = {
   getTopics,
   getArticles,
+  getUsers,
 };
