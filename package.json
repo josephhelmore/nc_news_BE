@@ -9,7 +9,9 @@
     "test": "jest --runInBand",
     "prepare": "husky install",
     "start": "node listen.js",
-    "test-seed": "jest seed.test.js"
+    "test-seed": "jest seed.test.js",
+    "dev": "nodemon listen.js",
+    "app-test": "jest app.test.js"
   },
   "repository": {
     "type": "git",
@@ -23,14 +25,17 @@
   },
   "homepage": "https://github.com/northcoders/be-nc-news#readme",
   "devDependencies": {
+    "express": "^5.1.0",
     "husky": "^8.0.2",
     "jest": "^27.5.1",
-    "jest-extended": "^2.0.0"
+    "jest-extended": "^2.0.0",
+    "supertest": "^7.1.4"
   },
   "dependencies": {
     "dotenv": "^16.6.1",
     "node-pg-format": "^1.3.5",
-    "pg": "^8.13.3",
+    "nodemon": "^3.1.10",
+    "pg": "^8.16.3",
     "pg-format": "^1.0.4"
   },
   "jest": {
