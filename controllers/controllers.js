@@ -15,7 +15,6 @@ const getArticles = (req, res) => {
 
 const getUsers = (req, res) => {
   fetchUsers().then((users) => {
-    console.log(users)
     res.status(200).send({ users });
   });
 };
