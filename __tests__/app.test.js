@@ -11,7 +11,6 @@ beforeEach(() => {
 afterAll(() => {
   return db.end();
 });
-
 describe("GET /api/topics", () => {
   test("200: responds with an object, with the key of topics and the value of an array of topic objects.", () => {
     return request(app)
@@ -43,13 +42,12 @@ describe("GET /api/articles", () => {
 
         for (let i = 0; i < body.articles.length - 1; i++) {
           const newdate = body.articles[i].created_at;
-          const nextDate = body.articles[i+1].created_at;
+          const nextDate = body.articles[i + 1].created_at;
           expect(newdate >= nextDate).toBe(true);
         }
       });
   });
 });
-
 describe("GET /api/users", () => {
   test("200: Should respond with an object with the key of users and the value of an array of objects ", () => {
     return request(app)
@@ -62,4 +60,14 @@ describe("GET /api/users", () => {
         expect(typeof body.users[0].avatar_url).toBe("string");
       });
   });
+});
+describe("GET /api/articles/:article_id", () => {
+  test("200: should respond with an object with the key of article and the value of an article object", () => {
+    return request(app)
+    .get("/api/articles/1")
+      .expect(200)
+      .then(({ body }) => {
+        expect(typeof body.article.author).toBe("string")
+    });
+});
 });

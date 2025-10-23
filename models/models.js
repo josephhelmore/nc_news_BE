@@ -14,13 +14,20 @@ const fetchArticles = () => {
     )
     .then(({ rows }) => rows);
 };
-
 const fetchUsers = () => {
   return db.query(`SELECT * FROM users`).then(({ rows }) => rows);
+};
+const fetchArticleData = (id) => {
+  return db
+    .query(`SELECT * FROM articles WHERE article_id = $1;`, [id])
+    .then(({ rows }) => {
+      return rows[0];
+    });
 };
 
 module.exports = {
   fetchArticles,
   fetchTopics,
   fetchUsers,
+  fetchArticleData,
 };

@@ -6,7 +6,7 @@ const controllers = require("./controllers/controllers");
 app.get("/api/topics", controllers.getTopics);
 app.get("/api/articles", controllers.getArticles);
 app.get("/api/users", controllers.getUsers);
-
+app.get("/api/articles/:article_id", controllers.getArticleData);
 
 
 
