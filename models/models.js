@@ -21,13 +21,30 @@ const fetchArticleData = (id) => {
   return db
     .query(`SELECT * FROM articles WHERE article_id = $1;`, [id])
     .then(({ rows }) => {
-      return rows[0];
+      const article = rows[0];
+      if (!article) {
+        return Promise.reject({
+          status: 404,
+          message: "Please enter a valid article_id",
+        });
+      }
+      return article;
     });
 };
+const fetchArticleComments = async (id) => {
+  await fetchArticleData(id);
 
+  const { rows: comments } = await db.query(
+    `SELECT * FROM comments WHERE article_id = $1
+      ORDER BY created_at ASC;`,
+    [id]
+  );
+  return comments;
+};
 module.exports = {
   fetchArticles,
   fetchTopics,
   fetchUsers,
   fetchArticleData,
+  fetchArticleComments,
 };

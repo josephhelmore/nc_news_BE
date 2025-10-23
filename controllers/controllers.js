@@ -4,6 +4,7 @@ const {
   fetchTopics,
   fetchUsers,
   fetchArticleData,
+  fetchArticleComments,
 } = require("../models/models");
 
 const getTopics = (req, res) => {
@@ -21,16 +22,25 @@ const getUsers = (req, res) => {
     res.status(200).send({ users });
   });
 };
-const getArticleData = (req, res) => {
-  const { article_id } = req.params
-  fetchArticleData(article_id).then((data) => {
-    res.status(200).send({ article: data });
-  });
+const getArticleData = (req, res, next) => {
+  const { article_id } = req.params;
+  fetchArticleData(article_id)
+    .then((data) => {
+      res.status(200).send({ article: data });
+    })
+    .catch(next);
 };
-
+const getArticleComments = (req, res, next) => {
+  const { article_id } = req.params;
+  fetchArticleComments(article_id).then((data) => {
+    res.status(200).send({ comments: data });
+  })
+  .catch(next)
+};
 module.exports = {
   getTopics,
   getArticles,
   getUsers,
   getArticleData,
+  getArticleComments,
 };
