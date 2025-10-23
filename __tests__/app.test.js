@@ -110,3 +110,18 @@ describe("GET /api/articles/:article_id/comments", () => {
       });
   });
 });
+describe("POST /api/articles/:article_id/comments", () => {
+  test("201: add a comment to an article and respond with the added comment", () => {
+    const newComment = {
+      username: "butter_bridge",
+      body: "This is a test body.",
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(newComment)
+      .expect(201)
+      .then(({ body }) => {
+        expect(body.comments.body).toBe("This is a test body.");
+      });
+  });
+});

@@ -17,9 +17,9 @@ const fetchArticles = () => {
 const fetchUsers = () => {
   return db.query(`SELECT * FROM users`).then(({ rows }) => rows);
 };
-const fetchArticleData = (id) => {
+const fetchArticleData = (article_id) => {
   return db
-    .query(`SELECT * FROM articles WHERE article_id = $1;`, [id])
+    .query(`SELECT * FROM articles WHERE article_id = $1;`, [article_id])
     .then(({ rows }) => {
       const article = rows[0];
       if (!article) {
@@ -31,15 +31,24 @@ const fetchArticleData = (id) => {
       return article;
     });
 };
-const fetchArticleComments = async (id) => {
-  await fetchArticleData(id);
+const fetchArticleComments = async (article_id) => {
+  await fetchArticleData(article_id);
 
   const { rows: comments } = await db.query(
     `SELECT * FROM comments WHERE article_id = $1
       ORDER BY created_at ASC;`,
-    [id]
+    [article_id]
   );
   return comments;
+};
+const postCommentToArticle = async (username, body, article_id) => {
+  await fetchArticleData(article_id);
+
+  const result = await db.query(
+    `INSERT INTO comments (body, author,article_id) VALUES ($1, $2, $3) RETURNING *`,
+    [body, username, article_id]
+  );
+  return result.rows[0];
 };
 module.exports = {
   fetchArticles,
@@ -47,4 +56,5 @@ module.exports = {
   fetchUsers,
   fetchArticleData,
   fetchArticleComments,
+  postCommentToArticle,
 };

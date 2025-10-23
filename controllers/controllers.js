@@ -5,6 +5,7 @@ const {
   fetchUsers,
   fetchArticleData,
   fetchArticleComments,
+  postCommentToArticle,
 } = require("../models/models");
 
 const getTopics = (req, res) => {
@@ -32,15 +33,34 @@ const getArticleData = (req, res, next) => {
 };
 const getArticleComments = (req, res, next) => {
   const { article_id } = req.params;
-  fetchArticleComments(article_id).then((data) => {
-    res.status(200).send({ comments: data });
-  })
-  .catch(next)
+  fetchArticleComments(article_id)
+    .then((data) => {
+      res.status(200).send({ comments: data });
+    })
+    .catch(next);
 };
+
+const postComment = (req, res, next) => {
+
+  const { article_id } = req.params;
+  const { body, username } = req.body
+
+  console.log(article_id)
+  console.log(body, username)
+
+  postCommentToArticle(username, body, article_id)
+    .then((data) => {
+      res.status(201).send({ comments: data });
+    })
+    .catch(next);
+};
+
+
 module.exports = {
   getTopics,
   getArticles,
   getUsers,
   getArticleData,
   getArticleComments,
+  postComment,
 };
