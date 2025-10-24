@@ -75,9 +75,17 @@ describe("GET /api/articles/:article_id", () => {
       .get("/api/articles/99")
       .expect(404)
       .then(({ body }) => {
-        expect(body.message).toBe("Please enter a valid article_id");
+        expect(body.message).toBe("This article does not exist");
       });
     //if the article ID is invalid (e.g. 99) it should return a 404 not found
+  });
+  test("400: should respond with a 400 error if a non-numeric article_id is passed", () => {
+    return request(app)
+      .get("/api/articles/not-an-id")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.message).toBe("Please enter a numerical article_id");
+      });
   });
 });
 describe("GET /api/articles/:article_id/comments", () => {
@@ -100,13 +108,20 @@ describe("GET /api/articles/:article_id/comments", () => {
         }
       });
   });
-
   test("404: Should return a 404 if an article does not exist", () => {
     return request(app)
       .get("/api/articles/99/comments")
       .expect(404)
       .then(({ body }) => {
-        expect(body.message).toBe("Please enter a valid article_id");
+        expect(body.message).toBe("This article does not exist");
+      });
+  });
+  test("200: Should respond with a message if an article has no comments.", () => {
+    return request(app)
+      .get("/api/articles/2/comments")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.comments).toEqual([]);
       });
   });
 });
@@ -122,6 +137,32 @@ describe("POST /api/articles/:article_id/comments", () => {
       .expect(201)
       .then(({ body }) => {
         expect(body.comments.body).toBe("This is a test body.");
+      });
+  });
+  test("404: should respond with a 404 error if an invalid article_id is passed", () => {
+    const newComment = {
+      username: "butter_bridge",
+      body: "This is a test body.",
+    };
+    return request(app)
+      .post("/api/articles/99/comments")
+      .send(newComment)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.message).toBe("This article does not exist");
+      });
+  });
+  test("400: should respond with a 400 error if a non-numeric article_id is passed", () => {
+    const newComment = {
+      username: "butter_bridge",
+      body: "This is a test body.",
+    };
+    return request(app)
+      .post("/api/articles/not-an-id/comments")
+      .send(newComment)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.message).toBe("Please enter a numerical article_id");
       });
   });
 });

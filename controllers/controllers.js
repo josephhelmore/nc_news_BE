@@ -39,14 +39,10 @@ const getArticleComments = (req, res, next) => {
     })
     .catch(next);
 };
-
 const postComment = (req, res, next) => {
 
   const { article_id } = req.params;
   const { body, username } = req.body
-
-  console.log(article_id)
-  console.log(body, username)
 
   postCommentToArticle(username, body, article_id)
     .then((data) => {

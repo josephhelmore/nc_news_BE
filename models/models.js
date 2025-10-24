@@ -18,38 +18,51 @@ const fetchUsers = () => {
   return db.query(`SELECT * FROM users`).then(({ rows }) => rows);
 };
 const fetchArticleData = (article_id) => {
+  if (isNaN(article_id)) {
+    return Promise.reject({
+      status: 400,
+      message: "Please enter a numerical article_id",
+    });
+  }
   return db
-    .query(`SELECT * FROM articles WHERE article_id = $1;`, [article_id])
+    .query(`SELECT * FROM articles WHERE article_id = $1`, [article_id])
     .then(({ rows }) => {
       const article = rows[0];
       if (!article) {
         return Promise.reject({
           status: 404,
-          message: "Please enter a valid article_id",
+          message: "This article does not exist",
         });
       }
       return article;
     });
 };
-const fetchArticleComments = async (article_id) => {
-  await fetchArticleData(article_id);
-
-  const { rows: comments } = await db.query(
-    `SELECT * FROM comments WHERE article_id = $1
+const fetchArticleComments = (article_id) => {
+  return fetchArticleData(article_id)
+    .then(() => {
+      return db.query(
+        `SELECT * FROM comments WHERE article_id = $1
       ORDER BY created_at ASC;`,
-    [article_id]
-  );
-  return comments;
+        [article_id]
+      );
+    })
+    .then(({ rows }) => {
+      return rows;
+    });
 };
-const postCommentToArticle = async (username, body, article_id) => {
-  await fetchArticleData(article_id);
+const postCommentToArticle = (username, body, article_id) => {
+  return fetchArticleData(article_id).then(() => {
+    return db
+      .query(
+        `INSERT INTO comments (body, author,article_id) VALUES ($1, $2, $3) RETURNING *`,
+        [body, username, article_id]
+      )
+      .then(({ rows }) => {
+        return rows[0];
+      });
+  });
+};
 
-  const result = await db.query(
-    `INSERT INTO comments (body, author,article_id) VALUES ($1, $2, $3) RETURNING *`,
-    [body, username, article_id]
-  );
-  return result.rows[0];
-};
 module.exports = {
   fetchArticles,
   fetchTopics,
