@@ -18,12 +18,6 @@ const fetchUsers = () => {
   return db.query(`SELECT * FROM users`).then(({ rows }) => rows);
 };
 const fetchArticleData = (article_id) => {
-  if (isNaN(article_id)) {
-    return Promise.reject({
-      status: 400,
-      message: "Please enter a numerical article_id",
-    });
-  }
   return db
     .query(`SELECT * FROM articles WHERE article_id = $1`, [article_id])
     .then(({ rows }) => {
@@ -63,16 +57,30 @@ const postCommentToArticle = (username, body, article_id) => {
   });
 };
 const updatedVotes = (article_id, inc_votes) => {
-  console.log(article_id, inc_votes);
-  return fetchArticleData(article_id)
-    .then(() => {
-      return db
-        .query(`UPDATE articles SET votes = votes + $1 WHERE article_id = $2 RETURNING *`, [inc_votes, article_id])
-        .then(({ rows }) => {
-          return rows[0];
+  return fetchArticleData(article_id).then(() => {
+    return db
+      .query(
+        `UPDATE articles SET votes = votes + $1 WHERE article_id = $2 RETURNING *`,
+        [inc_votes, article_id]
+      )
+      .then(({ rows }) => {
+        return rows[0];
+      });
+  });
+};
+const deleteComment = (comment_id) => {
+  return db
+    .query(`DELETE FROM comments WHERE comment_id = $1 RETURNING *`, [
+      comment_id,
+    ])
+    .then(({ rows }) => {
+      if (rows.length === 0) {
+        return Promise.reject({
+          status: 404,
+          message: "Comment not found",
         });
+      }
     });
-
 }
 
 module.exports = {
@@ -83,4 +91,5 @@ module.exports = {
   fetchArticleComments,
   postCommentToArticle,
   updatedVotes,
+  deleteComment,
 };

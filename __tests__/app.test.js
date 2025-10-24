@@ -167,7 +167,7 @@ describe("POST /api/articles/:article_id/comments", () => {
   });
 });
 describe("PATCH /api/articles/:article_id", () => {
-  test("200: should respond with the updated article with the votes increased by the given amount", () => {
+  test("200: should respond with the updated article with the votes increased by the given amount, without modifying any other properties", () => {
     const newVote = { inc_votes: 100 };
     return request(app)
       .patch("/api/articles/1")
@@ -175,6 +175,77 @@ describe("PATCH /api/articles/:article_id", () => {
       .expect(200)
       .then(({ body }) => {
         expect(body.article.votes).toBe(200);
+        expect(body.article.article_id).toBe(1);
+        expect(typeof body.article.author).toBe("string");
+        expect(body.article.author).toBe("butter_bridge");
+      });
+  });
+  test("200: should respond with the updated article with the votes decreased by the given amount without modifying other properties", () => {
+    const newVote = { inc_votes: -50 };
+    return request(app)
+      .patch("/api/articles/1")
+      .send(newVote)
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.article.votes).toBe(50);
+        expect(body.article.article_id).toBe(1);
+        expect(typeof body.article.author).toBe("string");
+        expect(body.article.author).toBe("butter_bridge");
+      });
+  });
+  test("404: should respond with a 404 error if an invalid article_id is passed", () => {
+    const newVote = { inc_votes: 100 };
+    return request(app)
+      .patch("/api/articles/99")
+      .send(newVote)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.message).toBe("This article does not exist");
+      });
+  });
+  test("400: should respond with a 400 error if a non-numeric article_id is passed", () => {
+    const newVote = { inc_votes: 100 };
+    return request(app)
+      .patch("/api/articles/not-an-id")
+      .send(newVote)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.message).toBe("Please enter a numerical article_id");
       });
   });
 });
+describe("DELETE /api/comments/:comment_id", () => {
+  test("204: Should delete the comment by the given comment_id", () => {
+    return request(app)
+      .delete("/api/comments/1")
+      .expect(204)
+      .then(() => {
+        return request(app)
+          .get("/api/articles/1/comments")
+          .expect(200)
+          .then(({ body }) => {
+            const commentArray = body.comments.map((comment) => {
+              return comment.comment_id;
+            });
+            expect(commentArray).not.toContain(1);
+          });
+      });
+  });
+  test("404: should respond with a 404 error if an invalid comment_id is passed", () => {
+    return request(app)
+      .delete("/api/comments/9999")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.message).toBe("Comment not found");
+      });
+  });
+  test("400: Should respond with a 400 error if a non-numeric comment_id is passed", () => {
+    return request(app)
+      .delete("/api/comments/not-an-id")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.message).toBe("Please enter a numerical comment_id");
+      });
+  });
+});
+
