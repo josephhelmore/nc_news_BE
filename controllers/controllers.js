@@ -6,6 +6,7 @@ const {
   fetchArticleData,
   fetchArticleComments,
   postCommentToArticle,
+  updatedVotes,
 } = require("../models/models");
 
 const getTopics = (req, res) => {
@@ -40,9 +41,8 @@ const getArticleComments = (req, res, next) => {
     .catch(next);
 };
 const postComment = (req, res, next) => {
-
   const { article_id } = req.params;
-  const { body, username } = req.body
+  const { body, username } = req.body;
 
   postCommentToArticle(username, body, article_id)
     .then((data) => {
@@ -50,7 +50,17 @@ const postComment = (req, res, next) => {
     })
     .catch(next);
 };
+const updateArticleVotes = (req, res, next) => {
 
+  const { article_id } = req.params;
+  const { inc_votes } = req.body;
+
+  updatedVotes(article_id, inc_votes)
+    .then((data) => {
+      res.status(200).send({ article: data });
+    })
+    .catch(next);
+};
 
 module.exports = {
   getTopics,
@@ -59,4 +69,5 @@ module.exports = {
   getArticleData,
   getArticleComments,
   postComment,
+  updateArticleVotes,
 };

@@ -166,3 +166,15 @@ describe("POST /api/articles/:article_id/comments", () => {
       });
   });
 });
+describe("PATCH /api/articles/:article_id", () => {
+  test("200: should respond with the updated article with the votes increased by the given amount", () => {
+    const newVote = { inc_votes: 100 };
+    return request(app)
+      .patch("/api/articles/1")
+      .send(newVote)
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.article.votes).toBe(200);
+      });
+  });
+});

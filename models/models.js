@@ -62,6 +62,18 @@ const postCommentToArticle = (username, body, article_id) => {
       });
   });
 };
+const updatedVotes = (article_id, inc_votes) => {
+  console.log(article_id, inc_votes);
+  return fetchArticleData(article_id)
+    .then(() => {
+      return db
+        .query(`UPDATE articles SET votes = votes + $1 WHERE article_id = $2 RETURNING *`, [inc_votes, article_id])
+        .then(({ rows }) => {
+          return rows[0];
+        });
+    });
+
+}
 
 module.exports = {
   fetchArticles,
@@ -70,4 +82,5 @@ module.exports = {
   fetchArticleData,
   fetchArticleComments,
   postCommentToArticle,
+  updatedVotes,
 };
