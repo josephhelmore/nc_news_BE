@@ -72,6 +72,9 @@ const deleteCommentById = (req, res, next) => {
     })
     .catch(next);
 };
+const APIHome = (req, res) => {
+  res.status(200).send({ message: "Welcome to the NC News API" });
+}
 
 module.exports = {
   getTopics,
@@ -82,4 +85,5 @@ module.exports = {
   postComment,
   updateArticleVotes,
   deleteCommentById,
+  APIHome
 };
