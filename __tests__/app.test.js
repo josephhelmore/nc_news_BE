@@ -314,4 +314,12 @@ describe("FEATURE REQUEST: GET /api/articles/:column=:order:  sort_by column in 
       });
       return Promise.all(promises);
     });
+  test("400: should respond with a 400 error when passed an invalid sort_by column", () => {
+    return request(app)
+    .get("/api/articles?sort_by=not-an-existing-column")
+    .expect(400)
+    .then(({body}) => {
+      expect(body.message).toBe("Please enter a valid column.")
+    })
+  })
 });

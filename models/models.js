@@ -5,7 +5,7 @@ const fetchTopics = () => {
   return db.query(`SELECT * FROM topics`).then(({ rows }) => rows);
 };
 const fetchArticles = (sort_by, order) => {
-  const validColumns = [
+  const columns = [
     "article_id",
     "title",
     "topic",
@@ -13,10 +13,19 @@ const fetchArticles = (sort_by, order) => {
     "created_at",
     "votes",
     "comment_count",
+    "article_img_url",
   ];
+
   const orders = ["ASC", "DESC"];
 
-  const sorted = validColumns.includes(sort_by) ? sort_by : "created_at";
+  if (!columns.includes(sort_by) && sort_by) {
+    return Promise.reject({
+      status: 400,
+      message: "Please enter a valid column.",
+    });
+  }
+
+  const sorted = columns.includes(sort_by) ? sort_by : "created_at";
   const ordered = orders.includes(order) ? order : "DESC";
 
   return db
