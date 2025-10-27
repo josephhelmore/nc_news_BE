@@ -27,7 +27,7 @@ app.get("/api", controllers.APIHome)
 
 
 app.get("/", (req, res) => {
-  res.status(200).send({ message: "Welcome to my first, small back-end project. To begin, please add '/api' to the url in your browser!" });
+  res.status(200).send("Welcome to my first, small back-end project. To begin, please add '/api' to the url in your browser!");
 });
 
 app.use((err, req, res, next) => {
