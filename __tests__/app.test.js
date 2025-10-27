@@ -248,7 +248,7 @@ describe("DELETE /api/comments/:comment_id", () => {
       });
   });
 });
-describe("FEATURE REQUEST: GET /api/articles/:column=:order:  sort_by column in asc or desc when given a valid column and order", () => {
+describe("FEATURE REQUEST: GET /api/articles?sort_by=:column&order=:order", () => {
   test("200: should default to sorting by date in descending order if no sort_by or order is given", () => {
     return request(app)
       .get("/api/articles")
@@ -288,7 +288,7 @@ describe("FEATURE REQUEST: GET /api/articles/:column=:order:  sort_by column in 
       "title",
       "topic",
       "author",
-      "created_at", 
+      "created_at",
       "votes",
       "article_img_url",
       "comment_count",
@@ -309,25 +309,43 @@ describe("FEATURE REQUEST: GET /api/articles/:column=:order:  sort_by column in 
               expect(body.articles).toBeSortedBy(column, { descending: true });
             }
           });
-          promises.push(promise);
-        });
+        promises.push(promise);
       });
-      return Promise.all(promises);
     });
+    return Promise.all(promises);
+  });
   test("400: should respond with a 400 error when passed an invalid sort_by column", () => {
     return request(app)
-    .get("/api/articles?sort_by=not-an-existing-column")
-    .expect(400)
-    .then(({body}) => {
-      expect(body.message).toBe("Please enter a valid column.")
-    })
-  })
+      .get("/api/articles?sort_by=not-an-existing-column")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.message).toBe("Please enter a valid column.");
+      });
+  });
   test("400: should respond with a 400 error when passed an invalid order", () => {
     return request(app)
-    .get("/api/articles?order=not-an-order")
-    .expect(400)
-    .then(({body}) => {
-      expect(body.message).toBe("Please enter a valid order. Either ASC or DESC")
-    })
+      .get("/api/articles?order=not-an-order")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.message).toBe(
+          "Please enter a valid order. Either ASC or DESC"
+        );
+      });
+  });
+});
+describe("FEATURE REQUEST: GET /api/articles?topic=:topic", () => {
+  test("200: Should respond with articles of a given topic", () => {
+    const topics = ["coding", "cooking", "football", "cats"];
+    const requests = topics.map((topic) => {
+      return request(app)
+        .get(`/api/articles?topic=${topic}`)
+        .expect(200)
+        .then(({ body }) => {
+          body.articles.forEach((article) => {
+            expect(article.topic).toBe(topic);
+          });
+        });
+    });
+    return Promise.all(requests);
   });
 });

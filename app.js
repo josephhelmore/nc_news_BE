@@ -22,7 +22,6 @@ app.get("/api/articles/:article_id/comments", controllers.getArticleComments);
 app.post("/api/articles/:article_id/comments", controllers.postComment);
 app.delete("/api/comments/:comment_id", controllers.deleteCommentById);
 
-
 app.use((err, req, res, next) => {
     if (err.code === "22P02") {
       res.status(400).send({ message: "Please enter a numerical id" });

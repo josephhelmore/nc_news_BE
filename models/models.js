@@ -4,7 +4,7 @@ const controllers = require("../controllers/controllers");
 const fetchTopics = () => {
   return db.query(`SELECT * FROM topics`).then(({ rows }) => rows);
 };
-const fetchArticles = (sort_by, order) => {
+const fetchArticles = (sort_by, order, topic) => {
   const columns = [
     "article_id",
     "title",
@@ -17,6 +17,16 @@ const fetchArticles = (sort_by, order) => {
   ];
 
   const orders = ["ASC", "DESC"];
+
+  const topics = ["coding", "cooking", "football"];
+
+  if (topic) {
+    return db
+      .query(`SELECT * FROM articles WHERE topic = $1`, [topic])
+      .then(({ rows }) => {
+        return rows;
+      });
+  }
 
   if (!columns.includes(sort_by) && sort_by) {
     return Promise.reject({
