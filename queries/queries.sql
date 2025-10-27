@@ -6,3 +6,4 @@ SELECT * FROM comments WHERE votes < 0;
 SELECT * FROM topics;
 SELECT * FROM articles WHERE author = 'grumpy19';
 SELECT * FROM comments WHERE votes > 10;
+

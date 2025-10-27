@@ -4,6 +4,7 @@ const seed = require("../db/seeds/seed");
 const data = require("../db/data/test-data");
 const app = require("../app");
 const request = require("supertest");
+const e = require("express");
 
 beforeEach(() => {
   return seed(data);
@@ -70,6 +71,17 @@ describe("GET /api/articles/:article_id", () => {
         expect(typeof body.article.author).toBe("string");
       });
   });
+  test("200: should respond with an article object containing a comment_count property", () => {
+    return request(app)
+      .get("/api/articles/1")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.article).toHaveProperty("comment_count");
+        expect(typeof body.article.comment_count).toBe("number");
+        expect(body.article.comment_count).toBe(11);
+      });
+  });
+
   test("404: should respond with a 404 error if an invalid article_id is passed", () => {
     return request(app)
       .get("/api/articles/99")
@@ -335,7 +347,7 @@ describe("FEATURE REQUEST: GET /api/articles?sort_by=:column&order=:order", () =
 });
 describe("FEATURE REQUEST: GET /api/articles?topic=:topic", () => {
   test("200: Should respond with articles of a given topic", () => {
-    const topics = ["coding", "cooking", "football", "cats"];
+    const topics = ["coding", "cooking", "football", "cats", "mitch"];
     const requests = topics.map((topic) => {
       return request(app)
         .get(`/api/articles?topic=${topic}`)
@@ -347,5 +359,13 @@ describe("FEATURE REQUEST: GET /api/articles?topic=:topic", () => {
         });
     });
     return Promise.all(requests);
+  });
+  test("404: should respond with a 404 error when passed a topic that does not exist", () => {
+    return request(app)
+      .get("/api/articles?topic=not-a-topic")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.message).toBe("Topic not found");
+      });
   });
 });
