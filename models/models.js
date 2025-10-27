@@ -4,15 +4,38 @@ const controllers = require("../controllers/controllers");
 const fetchTopics = () => {
   return db.query(`SELECT * FROM topics`).then(({ rows }) => rows);
 };
-const fetchArticles = () => {
+const fetchArticles = (sort_by, order) => {
+  const validColumns = [
+    "article_id",
+    "title",
+    "topic",
+    "author",
+    "created_at",
+    "votes",
+    "comment_count",
+  ];
+  const orders = ["ASC", "DESC"];
+
+  const sortBy = validColumns.includes(sort_by) ? sort_by : "created_at";
+  const orderBy = orders.includes(order) ? order : "DESC";
+
   return db
     .query(
-      `SELECT articles.article_id, articles.title, articles.topic, articles.author, articles.created_at, articles.votes, articles.article_img_url, COUNT(comments.comment_id) :: INT AS comment_count  FROM articles
+      `SELECT articles.article_id,
+      articles.title,
+      articles.topic,
+      articles.author,
+      articles.created_at,
+      articles.votes, 
+      articles.article_img_url, 
+      COUNT(comments.comment_id) :: INT AS comment_count  FROM articles
       LEFT JOIN comments ON articles.article_id = comments.article_id
       GROUP BY articles.article_id
-      ORDER BY articles.created_at DESC;`
+      ORDER BY ${sortBy} ${orderBy};`
     )
-    .then(({ rows }) => rows);
+    .then(({ rows }) => {
+      return rows;
+    });
 };
 const fetchUsers = () => {
   return db.query(`SELECT * FROM users`).then(({ rows }) => rows);
@@ -81,7 +104,7 @@ const deleteComment = (comment_id) => {
         });
       }
     });
-}
+};
 
 module.exports = {
   fetchArticles,

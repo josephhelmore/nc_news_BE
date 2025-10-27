@@ -84,7 +84,7 @@ describe("GET /api/articles/:article_id", () => {
       .get("/api/articles/not-an-id")
       .expect(400)
       .then(({ body }) => {
-        expect(body.message).toBe("Please enter a numerical article_id");
+        expect(body.message).toBe("Please enter a numerical id");
       });
   });
 });
@@ -162,7 +162,7 @@ describe("POST /api/articles/:article_id/comments", () => {
       .send(newComment)
       .expect(400)
       .then(({ body }) => {
-        expect(body.message).toBe("Please enter a numerical article_id");
+        expect(body.message).toBe("Please enter a numerical id");
       });
   });
 });
@@ -210,7 +210,7 @@ describe("PATCH /api/articles/:article_id", () => {
       .send(newVote)
       .expect(400)
       .then(({ body }) => {
-        expect(body.message).toBe("Please enter a numerical article_id");
+        expect(body.message).toBe("Please enter a numerical id");
       });
   });
 });
@@ -244,8 +244,42 @@ describe("DELETE /api/comments/:comment_id", () => {
       .delete("/api/comments/not-an-id")
       .expect(400)
       .then(({ body }) => {
-        expect(body.message).toBe("Please enter a numerical comment_id");
+        expect(body.message).toBe("Please enter a numerical id");
       });
   });
 });
-
+describe("FEATURE REQUEST: GET /api/articles/:column=:order:  sort_by column in asc or desc when given a valid column and order", () => {
+  test("200: should default to sorting by date in descending order if no sort_by or order is given", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then(({ body }) => {
+        for (let i = 0; i < body.articles.length - 1; i++) {
+          const newdate = body.articles[i].created_at;
+          const nextDate = body.articles[i + 1].created_at;
+          expect(newdate >= nextDate).toBe(true);
+        }
+      });
+  });
+  test("200: should sort by the given column by descending order as default when passed a valid column and no order", () => {
+    const validColumns = [
+      "article_id",
+      "title",
+      "topic",
+      "author",
+      "created_at",
+      "votes",
+      "article_img_url",
+      "comment_count",
+    ];
+    const requests = validColumns.map((column) => {
+      return request(app)
+        .get(`/api/articles?sort_by=${column}`)
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.articles).toBeSortedBy(column, { descending: true });
+        });
+    });
+    return Promise.all(requests);
+  });
+});

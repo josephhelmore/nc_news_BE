@@ -1,4 +1,5 @@
 const db = require("../db/connection");
+const { sort } = require("../db/data/test-data/articles");
 const {
   fetchArticles,
   fetchTopics,
@@ -7,7 +8,7 @@ const {
   fetchArticleComments,
   postCommentToArticle,
   updatedVotes,
-  deleteComment
+  deleteComment,
 } = require("../models/models");
 
 const getTopics = (req, res) => {
@@ -15,10 +16,12 @@ const getTopics = (req, res) => {
     res.status(200).send({ topics });
   });
 };
-const getArticles = (req, res) => {
-  fetchArticles().then((articles) => {
+const getArticles = (req, res, next) => {
+  const { sort_by, order } = req.query;
+  fetchArticles(sort_by, order).then((articles) => {
     res.status(200).send({ articles });
-  });
+  })
+  .catch(next);
 };
 const getUsers = (req, res) => {
   fetchUsers().then((users) => {
@@ -52,7 +55,6 @@ const postComment = (req, res, next) => {
     .catch(next);
 };
 const updateArticleVotes = (req, res, next) => {
-
   const { article_id } = req.params;
   const { inc_votes } = req.body;
 
@@ -69,7 +71,7 @@ const deleteCommentById = (req, res, next) => {
       res.status(204).send();
     })
     .catch(next);
-  }
+};
 
 module.exports = {
   getTopics,
@@ -79,5 +81,5 @@ module.exports = {
   getArticleComments,
   postComment,
   updateArticleVotes,
-deleteCommentById
+  deleteCommentById,
 };
