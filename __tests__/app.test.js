@@ -262,7 +262,7 @@ describe("FEATURE REQUEST: GET /api/articles/:column=:order:  sort_by column in 
       });
   });
   test("200: should sort by the given column by descending order as default when passed a valid column and no order", () => {
-    const validColumns = [
+    const columns = [
       "article_id",
       "title",
       "topic",
@@ -272,7 +272,7 @@ describe("FEATURE REQUEST: GET /api/articles/:column=:order:  sort_by column in 
       "article_img_url",
       "comment_count",
     ];
-    const requests = validColumns.map((column) => {
+    const requests = columns.map((column) => {
       return request(app)
         .get(`/api/articles?sort_by=${column}`)
         .expect(200)
@@ -282,4 +282,36 @@ describe("FEATURE REQUEST: GET /api/articles/:column=:order:  sort_by column in 
     });
     return Promise.all(requests);
   });
+  test("200: should sort by the given column and order when passed valid column and order", () => {
+    const columns = [
+      "article_id",
+      "title",
+      "topic",
+      "author",
+      "created_at", 
+      "votes",
+      "article_img_url",
+      "comment_count",
+    ];
+    const orders = ["ASC", "DESC"];
+
+    const promises = [];
+
+    columns.forEach((column) => {
+      orders.forEach((order) => {
+        const promise = request(app)
+          .get(`/api/articles?sort_by=${column}&order=${order}`)
+          .expect(200)
+          .then(({ body }) => {
+            if (order === "ASC") {
+              expect(body.articles).toBeSortedBy(column, { ascending: true });
+            } else {
+              expect(body.articles).toBeSortedBy(column, { descending: true });
+            }
+          });
+          promises.push(promise);
+        });
+      });
+      return Promise.all(promises);
+    });
 });

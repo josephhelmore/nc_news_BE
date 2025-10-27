@@ -16,8 +16,8 @@ const fetchArticles = (sort_by, order) => {
   ];
   const orders = ["ASC", "DESC"];
 
-  const sortBy = validColumns.includes(sort_by) ? sort_by : "created_at";
-  const orderBy = orders.includes(order) ? order : "DESC";
+  const sorted = validColumns.includes(sort_by) ? sort_by : "created_at";
+  const ordered = orders.includes(order) ? order : "DESC";
 
   return db
     .query(
@@ -28,10 +28,10 @@ const fetchArticles = (sort_by, order) => {
       articles.created_at,
       articles.votes, 
       articles.article_img_url, 
-      COUNT(comments.comment_id) :: INT AS comment_count  FROM articles
+      COUNT(comments.comment_id) :: INT AS comment_count FROM articles
       LEFT JOIN comments ON articles.article_id = comments.article_id
       GROUP BY articles.article_id
-      ORDER BY ${sortBy} ${orderBy};`
+      ORDER BY ${sorted} ${ordered};`
     )
     .then(({ rows }) => {
       return rows;
