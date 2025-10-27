@@ -25,6 +25,13 @@ const fetchArticles = (sort_by, order) => {
     });
   }
 
+  if (!orders.includes(order) && order) {
+    return Promise.reject({
+      status: 400,
+      message: "Please enter a valid order. Either ASC or DESC",
+    });
+  }
+
   const sorted = columns.includes(sort_by) ? sort_by : "created_at";
   const ordered = orders.includes(order) ? order : "DESC";
 

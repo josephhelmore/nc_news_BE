@@ -322,4 +322,12 @@ describe("FEATURE REQUEST: GET /api/articles/:column=:order:  sort_by column in 
       expect(body.message).toBe("Please enter a valid column.")
     })
   })
+  test("400: should respond with a 400 error when passed an invalid order", () => {
+    return request(app)
+    .get("/api/articles?order=not-an-order")
+    .expect(400)
+    .then(({body}) => {
+      expect(body.message).toBe("Please enter a valid order. Either ASC or DESC")
+    })
+  });
 });
