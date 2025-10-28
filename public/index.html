@@ -1,11 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <p>Hello, World!</p>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>API Landing Page</title>
+  </head>
+  <body>
+    <header>
+      <h1>Welcome to the API homepage for Northcoders News</h1>
+      <p>
+        This page will provide some useful information on how to navigate the
+        API along with some of the endpoints available to you. <br />
+        This API is designed to simulate a news website where clients are able
+        to navigate between different articles, topics and users. Queries can be
+        added to the end of endpoints to sort, filter and delete data as
+        required.
+      </p>
+      <p>Useful links:</p>
+      <ul>
+        <li>
+          <a href="https://github.com/josephhelmore/nc_news_BE">Github Repo</a>
+        </li>
+      </ul>
+    </header>
+    <main>
+      <h2>Endpoints available to you:</h2>
+
+      <section>
+        <h3><u>/api/topics</u></h3>
+        <ul>
+          <li>Method: <b>GET</b></li>
+          <li>
+            Description: Returns an object containing an array of all topics
+          </li>
+          <li>Queries: None</li>
+          <li>
+            Example Response:
+            <pre>
+ { topics: [ { slug: 'football', description: 'Footie!' }, {...} ] } </pre
+            >
+          </li>
+        </ul>
+      </section>
+      <section>
+        <h3>
+          <u>/api/users</u>
+        </h3>
+        <ul>
+        
+        </ul>
+      </section>
+    </main>
+  </body>
 </html>
