@@ -3,7 +3,7 @@ const app = express();
 const db = require("./db/connection");
 const controllers = require("./controllers/controllers");
 app.use(express.json());
-
+app.use('/api', express.static("public"));
 
 //to do; 
 /*
@@ -21,14 +21,8 @@ app.get("/api/articles/:article_id", controllers.getArticleData);
 app.get("/api/articles/:article_id/comments", controllers.getArticleComments);
 app.post("/api/articles/:article_id/comments", controllers.postComment);
 app.delete("/api/comments/:comment_id", controllers.deleteCommentById);
-app.get("/api", controllers.APIHome)
 
 
-
-
-app.get("/", (req, res) => {
-  res.status(200).send("Welcome to my first, small back-end project. To begin, please add '/api' to the url in your browser!");
-});
 
 app.use((err, req, res, next) => {
     if (err.code === "22P02") {

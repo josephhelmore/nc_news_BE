@@ -72,17 +72,7 @@ const deleteCommentById = (req, res, next) => {
     })
     .catch(next);
 };
-const APIHome = (req, res) => {
-  res.status(200).type('text/plain').send(`Thank you for visiting my first, small back-end project.
-    Since you have already added /api to the url - Here are some more end-points for you to try;
-    /topics 
-    /articles 
-    /users 
-    /articles/:article_id 
-    /articles/:article_id/comments 
-    You can also POST comments to /articles/:article_id/comments and PATCH votes to /articles/:article_id 
-    Enjoy :)` );
-}
+
 
 module.exports = {
   getTopics,
@@ -93,5 +83,4 @@ module.exports = {
   postComment,
   updateArticleVotes,
   deleteCommentById,
-  APIHome
 };
