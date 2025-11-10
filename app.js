@@ -1,7 +1,9 @@
+const cors = require('cors');
 const express = require("express");
 const app = express();
 const db = require("./db/connection");
 const controllers = require("./controllers/controllers");
+app.use(cors());
 app.use(express.json());
 app.use('/api', express.static("public"));
 
