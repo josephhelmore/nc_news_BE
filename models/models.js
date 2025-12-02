@@ -1,5 +1,4 @@
 const db = require("../db/connection");
-const controllers = require("../controllers/controllers");
 
 const fetchTopics = () => {
   return db.query(`SELECT * FROM topics`).then(({ rows }) => rows);
@@ -115,6 +114,7 @@ const fetchArticleComments = (article_id) => {
     });
 };
 const postCommentToArticle = (username, body, article_id) => {
+
   return fetchArticleData(article_id).then(() => {
     return db
       .query(

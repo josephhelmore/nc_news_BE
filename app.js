@@ -2,7 +2,11 @@ const cors = require('cors');
 const express = require("express");
 const app = express();
 const db = require("./db/connection");
-const controllers = require("./controllers/controllers");
+const updateControllers = require("./controllers/updateControllers");
+const getControllers = require('./controllers/getControllers')
+const postControllers = require('./controllers/postControllers')
+const deleteControllers = require('./controllers/deleteControllers')
+
 app.use(cors());
 app.use(express.json());
 app.use('/api', express.static("public"));
@@ -15,15 +19,14 @@ move models into their own targetted files ; snacks, articles, users etc
 add more error handling 
 */
 
-app.get("/api/topics", controllers.getTopics);
-app.get("/api/articles", controllers.getArticles);
-app.get("/api/users", controllers.getUsers);
-app.patch("/api/articles/:article_id", controllers.updateArticleVotes);
-app.get("/api/articles/:article_id", controllers.getArticleData);
-app.get("/api/articles/:article_id/comments", controllers.getArticleComments);
-app.post("/api/articles/:article_id/comments", controllers.postComment);
-app.delete("/api/comments/:comment_id", controllers.deleteCommentById);
-
+app.get("/api/topics", getControllers.getTopics);
+app.get("/api/articles", getControllers.getArticles);
+app.get("/api/users", getControllers.getUsers);
+app.patch("/api/articles/:article_id", updateControllers.updateArticleVotes);
+app.get("/api/articles/:article_id", getControllers.getArticleData);
+app.get("/api/articles/:article_id/comments", getControllers.getArticleComments);
+app.post("/api/articles/:article_id/comments", postControllers.postComment);
+app.delete("/api/comments/:comment_id", deleteControllers.deleteCommentById);
 
 
 app.use((err, req, res, next) => {

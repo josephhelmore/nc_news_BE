@@ -4,28 +4,23 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>API Landing Page</title>
+    <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <header>
       <h1>Welcome to the API homepage for Northcoders News</h1>
-      <p>
+      <h2 id = "intro">INTRO</h2>
+      <p id="intro">
         This page will provide some useful information on how to navigate the
         API along with some of the endpoints available to you. <br />
         This API is designed to simulate a news website where clients are able
         to navigate between different articles, topics and users. Queries can be
-        added to the end of endpoints to sort, filter and delete data as
+        added to the end articles to sort, filter and delete data as
         required.
       </p>
-      <p>Useful links:</p>
-      <ul>
-        <li>
-          <a href="https://github.com/josephhelmore/nc_news_BE">Github Repo</a>
-        </li>
-      </ul>
     </header>
-    <main>
-      <h2>Endpoints available to you:</h2>
-
+    <main class = main-body>
+      <h2>Endpoints available to you</h2>
       <section>
         <h3><u>/api/topics</u></h3>
         <ul>
@@ -37,7 +32,7 @@
           <li>Queries: None</li>
           <li>
             Example response:
-            <pre>
+            <pre id="example-responses">
  { topics: [ { slug: 'football', description: 'Footie!' }, {...} ] } </pre
             >
           </li>
@@ -56,7 +51,7 @@
           <li>Queries: None</li>
           <li>
             Example response:
-            <pre> {"users":[{"username":"tickle122","name":"Tom Tickle","avatar_url": <a href="https://vignette.wikia.nocookie.net/mrmen/images/d/d6/Mr-Tickle-9a.png/revision/latest?cb=20180127221953">url-link</a>}, {...}, ... ]} </pre>
+            <pre id="example-responses"> {"users":[{"username":"tickle122","name":"Tom Tickle","avatar_url": <a href="https://vignette.wikia.nocookie.net/mrmen/images/d/d6/Mr-Tickle-9a.png/revision/latest?cb=20180127221953">url-link</a>}, {...}, ... ]} </pre>
           </li>
         </ul>
       </section>
@@ -82,7 +77,7 @@
           </ul>
           <li>
             Example response:
-            <pre>{"articles":[{"article_id":34,"title":"The Notorious MSG’s Unlikely Formula For Success","topic":"cooking","author":"grumpy19", <br/>"created_at":"2020-11-22T11:13:00.000Z","votes":0,"article_img_url": <a href="https://images.pexels.com/photos/2403392/pexels-photo-2403392.jpeg?w=700&h=700">url-link</a>,"comment_count":11}, {...} ... ]}</pre>
+            <pre id="example-responses">{"articles":[{"article_id":34,"title":"The Notorious MSG’s Unlikely Formula For Success","topic":"cooking","author":"grumpy19", "created_at":"2020-11-22T11:13:00.000Z","votes":0,"article_img_url": <a href="https://images.pexels.com/photos/2403392/pexels-photo-2403392.jpeg?w=700&h=700">url-link</a>,"comment_count":11}, {...} ... ]}</pre>
           </li>
           <li>
             Other article end points:
@@ -109,10 +104,8 @@
           <li>Path: /api/articles/:article_id</li>
           <li>
             Requested body format:
-            <pre>{ inc_votes: 100 }</pre>
-            to increase votes by 100, or
-            <pre>{ inc_votes: -50}</pre>
-            to decrease votes by 50
+            <pre id="example-responses">To increase votes: { inc_votes: 100 }</pre>
+            <pre id="example-responses">To decrease votes: { inc_votes: -50 }</pre>
           </li>
         </ul>
 
@@ -125,12 +118,16 @@
           <li>Path: /api/articles/:article_id/comments</li>
           <li>
             Requested body format:
-            <pre>
+            <pre id="example-responses">
 { username: "butter_bridge", body: "This is a test body." }</pre
             >
           </li>
         </ul>
       </section>
     </main>
+    <footer>
+      <p>Useful links:</p>
+                <a href="https://github.com/josephhelmore/nc_news_BE">Github Repo</a>
+    </footer>
   </body>
 </html>
