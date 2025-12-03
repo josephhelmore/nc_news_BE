@@ -147,7 +147,8 @@ describe("POST /api/articles/:article_id/comments", () => {
       .send(newComment)
       .expect(201)
       .then(({ body }) => {
-        expect(body.comments.body).toBe("This is a test body.");
+        console.log(body)
+        expect(body.comment.body).toBe("This is a test body.");
       });
   });
   test("404: should respond with a 404 error if an invalid article_id is passed", () => {

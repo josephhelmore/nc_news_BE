@@ -8,6 +8,7 @@ const {
 } = require("../models/fetch-models");
 const { isTopic, validId } = require("./controller-error-handling");
 
+
 const getTopics = async (req, res) => {
   try {
     const topics =  await fetchTopics();
@@ -59,6 +60,8 @@ const getArticleData = async (req, res, next) => {
 const getArticleComments = async (req, res, next) => {
   try {
     const { article_id } = req.params;
+
+    await validId(article_id)
 
     const data = await fetchArticleComments(article_id);
 
