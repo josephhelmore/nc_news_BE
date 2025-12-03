@@ -1,13 +1,14 @@
-const {postCommentToArticle} = require('../models/post-models')
-
+const { postCommentToArticle } = require("../models/post-models");
+const { validId } = require("./controller-error-handling");
 
 const postComment = (req, res, next) => {
   const { article_id } = req.params;
   const { body, username } = req.body;
 
-if (isNaN(Number(article_id))) {
-    return Promise.reject({ status: 400, message: "Please enter a numerical id" });
-  }
+  validId(article_id)
+    .then(() => postCommentToArticle(username, body, article_id))
+    .then((comment) => res.status(201).send({ comment }))
+    .catch(next);
 
   postCommentToArticle(username, body, article_id)
     .then((data) => {
@@ -16,4 +17,4 @@ if (isNaN(Number(article_id))) {
     .catch(next);
 };
 
-module.exports = {postComment}
+module.exports = { postComment };

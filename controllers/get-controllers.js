@@ -1,5 +1,12 @@
 const db = require("../db/connection");
-const {fetchTopics, fetchArticles, fetchUsers, fetchArticleData, fetchArticleComments} = require("../models/fetch-models")
+const {
+  fetchTopics,
+  fetchArticles,
+  fetchUsers,
+  fetchArticleData,
+  fetchArticleComments,
+} = require("../models/fetch-models");
+const {isTopic} = require("./controller-error-handling")
 
 const getTopics = (req, res) => {
   fetchTopics().then((topics) => {
@@ -8,6 +15,14 @@ const getTopics = (req, res) => {
 };
 const getArticles = (req, res, next) => {
   const { sort_by, order, topic } = req.query;
+
+ if (topic) {
+    return isTopic(topic)
+      .then(() => fetchArticles(sort_by, order, topic))
+      .then((articles) => res.status(200).send({ articles }))
+      .catch(next);
+  }
+
   fetchArticles(sort_by, order, topic)
     .then((articles) => {
       res.status(200).send({ articles });
@@ -21,6 +36,9 @@ const getUsers = (req, res) => {
 };
 const getArticleData = (req, res, next) => {
   const { article_id } = req.params;
+
+  //validate article_id
+
   fetchArticleData(article_id)
     .then((data) => {
       res.status(200).send({ article: data });

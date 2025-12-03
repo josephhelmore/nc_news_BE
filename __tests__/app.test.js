@@ -82,14 +82,13 @@ describe("GET /api/articles/:article_id", () => {
       });
   });
 
-  test("404: should respond with a 404 error if an invalid article_id is passed", () => {
+  test("404: should respond with a 404 error if an article_id is passed that does not exist", () => {
     return request(app)
       .get("/api/articles/99")
       .expect(404)
       .then(({ body }) => {
         expect(body.message).toBe("This article does not exist");
       });
-    //if the article ID is invalid (e.g. 99) it should return a 404 not found
   });
   test("400: should respond with a 400 error if a non-numeric article_id is passed", () => {
     return request(app)

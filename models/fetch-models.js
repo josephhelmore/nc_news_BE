@@ -1,4 +1,5 @@
 const db = require("../db/connection");
+const {isTopic} = require("./model-error-handling")
 const fetchTopics = () => {
   return db.query(`SELECT * FROM topics`).then(({ rows }) => rows);
 };
@@ -14,23 +15,16 @@ const fetchArticles = (sort_by, order, topic) => {
     "article_img_url",
   ];
 
-  const orders = ["ASC", "DESC"];
-
-  const topics = ["coding", "cooking", "football", "mitch", "cats"];
-
-  if (topic) {
-    if (!topics.includes(topic)) {
-      return Promise.reject({
-        status: 404,
-        message: "Topic not found",
-      });
-    }
+if (topic) {
     return db
       .query(`SELECT * FROM articles WHERE topic = $1`, [topic])
       .then(({ rows }) => {
         return rows;
       });
   }
+
+  const orders = ["ASC", "DESC"];
+
 
   if (!columns.includes(sort_by) && sort_by) {
     return Promise.reject({
