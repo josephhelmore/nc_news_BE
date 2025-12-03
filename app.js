@@ -2,10 +2,10 @@ const cors = require('cors');
 const express = require("express");
 const app = express();
 const db = require("./db/connection");
-const updateControllers = require("./controllers/updateControllers");
-const getControllers = require('./controllers/getControllers')
-const postControllers = require('./controllers/postControllers')
-const deleteControllers = require('./controllers/deleteControllers')
+const updateControllers = require("./controllers/update-controllers");
+const getControllers = require('./controllers/get-controllers')
+const postControllers = require('./controllers/post-controllers')
+const deleteControllers = require('./controllers/delete-controllers')
 
 app.use(cors());
 app.use(express.json());
@@ -30,20 +30,18 @@ app.delete("/api/comments/:comment_id", deleteControllers.deleteCommentById);
 
 
 app.use((err, req, res, next) => {
-    if (err.code === "22P02") {
-      res.status(400).send({ message: "Please enter a numerical id" });
-    } else {
-      next(err);
-    }
-  });
-
-app.use((err, req, res, next) => {
   if (err.status && err.message) {
-    res.status(err.status).send({ message: err.message });
-  } else {
-    res.status(500).send({ message: "There has been an error" });
+    return res.status(err.status).send({ message: err.message });
   }
+
+  if (err.code === "22P02") {
+    return res.status(400).send({ message: "Please enter a numerical id" });
+  }
+
+  console.log(err);
+  res.status(500).send({ message: "Internal Server Error" });
 });
+
 
 
 

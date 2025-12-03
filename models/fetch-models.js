@@ -1,5 +1,4 @@
 const db = require("../db/connection");
-
 const fetchTopics = () => {
   return db.query(`SELECT * FROM topics`).then(({ rows }) => rows);
 };
@@ -113,53 +112,4 @@ const fetchArticleComments = (article_id) => {
       return rows;
     });
 };
-const postCommentToArticle = (username, body, article_id) => {
-
-  return fetchArticleData(article_id).then(() => {
-    return db
-      .query(
-        `INSERT INTO comments (body, author,article_id) VALUES ($1, $2, $3) RETURNING *`,
-        [body, username, article_id]
-      )
-      .then(({ rows }) => {
-        return rows[0];
-      });
-  });
-};
-const updatedVotes = (article_id, inc_votes) => {
-  return fetchArticleData(article_id).then(() => {
-    return db
-      .query(
-        `UPDATE articles SET votes = votes + $1 WHERE article_id = $2 RETURNING *`,
-        [inc_votes, article_id]
-      )
-      .then(({ rows }) => {
-        return rows[0];
-      });
-  });
-};
-const deleteComment = (comment_id) => {
-  return db
-    .query(`DELETE FROM comments WHERE comment_id = $1 RETURNING *`, [
-      comment_id,
-    ])
-    .then(({ rows }) => {
-      if (rows.length === 0) {
-        return Promise.reject({
-          status: 404,
-          message: "Comment not found",
-        });
-      }
-    });
-};
-
-module.exports = {
-  fetchArticles,
-  fetchTopics,
-  fetchUsers,
-  fetchArticleData,
-  fetchArticleComments,
-  postCommentToArticle,
-  updatedVotes,
-  deleteComment,
-};
+module.exports = { fetchTopics, fetchArticles, fetchUsers , fetchArticleData, fetchArticleComments};

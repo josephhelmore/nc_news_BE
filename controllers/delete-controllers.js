@@ -1,4 +1,4 @@
-const {deleteComment} = require('../models/models')
+const {deleteComment} = require('../models/delete-modules')
 
 const deleteCommentById = (req, res, next) => {
   const { comment_id } = req.params;

@@ -1,12 +1,5 @@
 const db = require("../db/connection");
-
-const {
-  fetchArticles,
-  fetchTopics,
-  fetchUsers,
-  fetchArticleData,
-  fetchArticleComments,
-} = require("../models/models");
+const {fetchTopics, fetchArticles, fetchUsers, fetchArticleData, fetchArticleComments} = require("../models/fetch-models")
 
 const getTopics = (req, res) => {
   fetchTopics().then((topics) => {

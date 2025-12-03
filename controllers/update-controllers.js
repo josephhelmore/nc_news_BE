@@ -1,12 +1,9 @@
-const db = require("../db/connection");
-const {
-  updatedVotes,
-} = require("../models/models");
-
+const { updatedVotes } = require("../models/update-models");
 
 const updateArticleVotes = (req, res, next) => {
   const { article_id } = req.params;
   const { inc_votes } = req.body;
+
 
   updatedVotes(article_id, inc_votes)
     .then((data) => {
@@ -14,8 +11,6 @@ const updateArticleVotes = (req, res, next) => {
     })
     .catch(next);
 };
-
-
 
 module.exports = {
   updateArticleVotes,
