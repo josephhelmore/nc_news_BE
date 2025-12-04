@@ -368,3 +368,13 @@ describe("FEATURE REQUEST: GET /api/articles?topic=:topic", () => {
       });
   });
 });
+describe("Invalid path handling", () => {
+  test("404: should respond with a 404 error when given an invalid path", () => {
+    return request(app)
+      .get("/api/not-a-path")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.message).toBe("Path not found");
+      });
+  });
+});
