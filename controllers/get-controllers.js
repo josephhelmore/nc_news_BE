@@ -6,7 +6,7 @@ const {
   fetchArticleData,
   fetchArticleComments,
 } = require("../models/fetch-models");
-const { isTopic, validId } = require("./controller-error-handling");
+const { isTopic, validNumber } = require("./controller-error-handling");
 
 
 const getTopics = async (req, res) => {
@@ -44,7 +44,7 @@ const getArticleData = async (req, res, next) => {
   try {
     const { article_id } = req.params;
 
-    await validId(article_id);
+    await validNumber(article_id);
 
     const data = await fetchArticleData(article_id);
 
@@ -61,7 +61,7 @@ const getArticleComments = async (req, res, next) => {
   try {
     const { article_id } = req.params;
 
-    await validId(article_id)
+    await validNumber(article_id)
 
     const data = await fetchArticleComments(article_id);
 
@@ -70,6 +70,8 @@ const getArticleComments = async (req, res, next) => {
     next(err);
   }
 };
+
+
 
 module.exports = {
   getTopics,

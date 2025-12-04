@@ -1,11 +1,12 @@
 const { updatedVotes } = require("../models/update-models");
+const {validNumber} = require("./controller-error-handling")
 
-const updateArticleVotes = (req, res, next) => {
+const updateArticleVotes = async(req, res, next) => {
   const { article_id } = req.params;
   const { inc_votes } = req.body;
 
-  
-
+await validNumber(article_id)
+await validNumber(inc_votes)
 
 
   updatedVotes(article_id, inc_votes)

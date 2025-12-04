@@ -1,9 +1,10 @@
 const db = require("../db/connection");
-const {isTopic} = require("./model-error-handling")
+const { isFound } = require("./model-error-handling");
+
 const fetchTopics = () => {
   return db.query(`SELECT * FROM topics`).then(({ rows }) => rows);
 };
-const fetchArticles = (sort_by, order, topic) => {
+const fetchArticles = async (sort_by, order, topic) => {
   const columns = [
     "article_id",
     "title",
@@ -15,16 +16,14 @@ const fetchArticles = (sort_by, order, topic) => {
     "article_img_url",
   ];
 
-if (topic) {
-    return db
-      .query(`SELECT * FROM articles WHERE topic = $1`, [topic])
-      .then(({ rows }) => {
-        return rows;
-      });
+  if (topic) {
+    const { rows } = await db.query(`SELECT * FROM articles WHERE topic = $1`, [
+      topic,
+    ]);
+    return rows;
   }
 
   const orders = ["ASC", "DESC"];
-
 
   if (!columns.includes(sort_by) && sort_by) {
     return Promise.reject({
@@ -64,10 +63,9 @@ if (topic) {
 const fetchUsers = () => {
   return db.query(`SELECT * FROM users`).then(({ rows }) => rows);
 };
-const fetchArticleData = (article_id) => {
-  return db
-    .query(
-      `SELECT articles.article_id,
+const fetchArticleData = async (article_id) => {
+  const { rows } = await db.query(
+    `SELECT articles.article_id,
     articles.title,
     articles.topic,
     articles.author,
@@ -79,20 +77,14 @@ const fetchArticleData = (article_id) => {
     LEFT JOIN comments ON articles.article_id = comments.article_id
     WHERE articles.article_id = $1
     GROUP BY articles.article_id;`,
-      [article_id]
-    )
+    [article_id]
+  );
 
-    .then(({ rows }) => {
-      const article = rows[0];
-      if (!article) {
-        return Promise.reject({
-          status: 404,
-          message: "This article does not exist",
-        });
-      }
-      return article;
-    });
+  isFound(rows);
+
+  return rows[0];
 };
+
 const fetchArticleComments = (article_id) => {
   return fetchArticleData(article_id)
     .then(() => {
@@ -106,4 +98,10 @@ const fetchArticleComments = (article_id) => {
       return rows;
     });
 };
-module.exports = { fetchTopics, fetchArticles, fetchUsers , fetchArticleData, fetchArticleComments};
+module.exports = {
+  fetchTopics,
+  fetchArticles,
+  fetchUsers,
+  fetchArticleData,
+  fetchArticleComments,
+};

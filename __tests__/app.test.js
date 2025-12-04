@@ -87,7 +87,7 @@ describe("GET /api/articles/:article_id", () => {
       .get("/api/articles/99")
       .expect(404)
       .then(({ body }) => {
-        expect(body.message).toBe("This article does not exist");
+        expect(body.message).toBe("This data does not exist");
       });
   });
   test("400: should respond with a 400 error if a non-numeric article_id is passed", () => {
@@ -95,7 +95,7 @@ describe("GET /api/articles/:article_id", () => {
       .get("/api/articles/not-an-id")
       .expect(400)
       .then(({ body }) => {
-        expect(body.message).toBe("Please enter a numerical id");
+        expect(body.message).toBe("Please enter a number");
       });
   });
 });
@@ -124,7 +124,7 @@ describe("GET /api/articles/:article_id/comments", () => {
       .get("/api/articles/99/comments")
       .expect(404)
       .then(({ body }) => {
-        expect(body.message).toBe("This article does not exist");
+        expect(body.message).toBe("This data does not exist");
       });
   });
   test("200: Should respond with a message if an article has no comments.", () => {
@@ -147,7 +147,6 @@ describe("POST /api/articles/:article_id/comments", () => {
       .send(newComment)
       .expect(201)
       .then(({ body }) => {
-        console.log(body)
         expect(body.comment.body).toBe("This is a test body.");
       });
   });
@@ -161,7 +160,7 @@ describe("POST /api/articles/:article_id/comments", () => {
       .send(newComment)
       .expect(404)
       .then(({ body }) => {
-        expect(body.message).toBe("This article does not exist");
+        expect(body.message).toBe("This data does not exist");
       });
   });
   test("400: should respond with a 400 error if a non-numeric article_id is passed", () => {
@@ -174,7 +173,7 @@ describe("POST /api/articles/:article_id/comments", () => {
       .send(newComment)
       .expect(400)
       .then(({ body }) => {
-        expect(body.message).toBe("Please enter a numerical id");
+        expect(body.message).toBe("Please enter a number");
       });
   });
 });
@@ -212,7 +211,7 @@ describe("PATCH /api/articles/:article_id", () => {
       .send(newVote)
       .expect(404)
       .then(({ body }) => {
-        expect(body.message).toBe("This article does not exist");
+        expect(body.message).toBe("This data does not exist");
       });
   });
   test("400: should respond with a 400 error if a non-numeric article_id is passed", () => {
@@ -222,7 +221,7 @@ describe("PATCH /api/articles/:article_id", () => {
       .send(newVote)
       .expect(400)
       .then(({ body }) => {
-        expect(body.message).toBe("Please enter a numerical id");
+        expect(body.message).toBe("Please enter a number");
       });
   });
 });
@@ -248,7 +247,7 @@ describe("DELETE /api/comments/:comment_id", () => {
       .delete("/api/comments/9999")
       .expect(404)
       .then(({ body }) => {
-        expect(body.message).toBe("Comment not found");
+        expect(body.message).toBe("This data does not exist");
       });
   });
   test("400: Should respond with a 400 error if a non-numeric comment_id is passed", () => {
@@ -256,7 +255,7 @@ describe("DELETE /api/comments/:comment_id", () => {
       .delete("/api/comments/not-an-id")
       .expect(400)
       .then(({ body }) => {
-        expect(body.message).toBe("Please enter a numerical id");
+        expect(body.message).toBe("Please enter a number");
       });
   });
 });
