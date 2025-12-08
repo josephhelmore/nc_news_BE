@@ -36,3 +36,29 @@ This will install all the necessary dependancies such as;
     -test your setup by running 'npm run test-seed' and 'npm run test-dev'
 
 
+--setup.dbs--
+
+- In your /db folder - create a new setup-dbs.sql file 
+- Add your
+
+DROP DATABASE IF EXISTS 'test_db_name;
+CREATE DATABASE test_db_name;
+
+DROP DATABASE IF EXISTS dev_db_name;
+CREATE DATABASE dev_db_name;
+
+
+Once these steps are complete, you should be able to seed and run the test + dev database. 
+```
+Tests
+- npm run setup-dbs
+- npm run seed-test
+- npm t 
+
+Dev
+- npm run setup-dbs
+- npm run seed-dev
+- npm run-dev
+
+
+
