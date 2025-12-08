@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
 
-const getControllers = require('../controllers/get-controllers');
-const postControllers = require('../controllers/post-controllers');
-const updateControllers = require('../controllers/update-controllers');
+const getControllers = require("../controllers/get-controllers");
+const postControllers = require("../controllers/post-controllers");
+const updateControllers = require("../controllers/update-controllers");
 
 router.get("/", getControllers.getArticles);
 router.get("/:article_id", getControllers.getArticleData);

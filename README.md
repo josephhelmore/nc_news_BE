@@ -18,15 +18,21 @@ First thing is to run
 npm i
 ```
 
-This will install 
+This will install all the necessary dependancies such as;
+- Jest
+- Cors
+- Dotenv etc
+
+
 
 --dotenv--
+
 - The .env.development and .env.test files have been git.ignore(d) for the purpose of security. 
 - These files are used to create the databases on your local machine. 
 - These will need to be added into the root folder
     -run the setup script 'npm run setup-dbs'
     -create your '.env.development' and '.env.test' files
-    -inside these add PGDATABASE = database_name.test and development respectively
+    -inside these add PGDATABASE = database_name_test and development respectively
     -test your setup by running 'npm run test-seed' and 'npm run test-dev'
 
 
