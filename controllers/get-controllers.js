@@ -6,7 +6,7 @@ const {
   fetchArticleData,
   fetchArticleComments,
 } = require("../models/fetch-models");
-const { isTopic, validNumber } = require("./controller-error-handling");
+const { validNumber } = require("./controller-error-handling");
 
 const getTopics = async (req, res, next) => {
   try {
@@ -20,9 +20,9 @@ const getArticles = async (req, res, next) => {
   try {
     const { sort_by, order, topic } = req.query;
 
-    if (topic) {
-      await isTopic(topic);
-    }
+    // if (topic) {
+    //   await isTopic(topic);
+    // }
 
     const articles = await fetchArticles(sort_by, order, topic);
     res.status(200).send({ articles });

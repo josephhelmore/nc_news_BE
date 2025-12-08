@@ -176,6 +176,33 @@ describe("POST /api/articles/:article_id/comments", () => {
         expect(body.message).toBe("Please enter a number");
       });
   });
+  test('400: should respond with a 400 error if the request body is missing "username" or "body" properties', () => {
+    const newComment = {
+      body: "This is a test body.",
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(newComment)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.message).toBe("Bad Request");
+      });
+  });
+
+  test('404: should respond with a 404 error if the username does not exist', () => {
+    const newComment = {
+      username: "not-a-user",
+      body: "This is a test body.",
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(newComment)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.message).toBe("Username not found");
+      });
+  });
+
 });
 describe("PATCH /api/articles/:article_id", () => {
   test("200: should respond with the updated article with the votes increased by the given amount, without modifying any other properties", () => {
@@ -359,12 +386,12 @@ describe("FEATURE REQUEST: GET /api/articles?topic=:topic", () => {
     });
     return Promise.all(requests);
   });
-  test("404: should respond with a 404 error when passed a topic that does not exist", () => {
+  test("200: should respond with a 200 error when passed a topic that does not exist", () => {
     return request(app)
       .get("/api/articles?topic=not-a-topic")
-      .expect(404)
+      .expect(200)
       .then(({ body }) => {
-        expect(body.message).toBe("Topic not found");
+       expect(body.articles).toEqual([])
       });
   });
 });

@@ -9,19 +9,16 @@ The purpose of this project was to be able to grow the endpoints to GET, POST, P
 Below are a few instructions to get the code running on your own machine. 
 
 --cloning-- 
-- fork the below repo to your own profile then clone the url into your VSCode
+- fork the below repo to your own profile then clone the url into your VSCode/Comparable
 - repo <https://github.com/josephhelmore/nc_news_BE>
 
 
---installing dependencies--
-- npm i -D supertest
-- npm i -D jest
-- npm i -D jest-extended
-- npm i -D jest-sorted
-- npm i express
-- npm i dotenv
-- npm i pg-format
-- npm i nodemon
+First thing is to run 
+``` 
+npm i
+```
+
+This will install 
 
 --dotenv--
 - The .env.development and .env.test files have been git.ignore(d) for the purpose of security. 

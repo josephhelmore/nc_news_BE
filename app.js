@@ -10,6 +10,10 @@ const usersRouter = require('./routes/users-router')
 app.use(cors());
 app.use(express.json());
 app.use('/api', express.static("public"));
+app.get('/', (req, res) => {
+    res.redirect('/api/');
+});
+
 
 app.use('/api/articles', articlesRouter);
 app.use('/api/comments', commentsRouter);

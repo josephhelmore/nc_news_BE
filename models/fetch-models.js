@@ -16,6 +16,8 @@ const fetchArticles = async (sort_by, order, topic) => {
     "article_img_url",
   ];
 
+
+
   if (topic) {
     const { rows } = await db.query(`SELECT * FROM articles WHERE topic = $1`, [
       topic,
@@ -23,7 +25,7 @@ const fetchArticles = async (sort_by, order, topic) => {
     return rows;
   }
 
-  const orders = ["ASC", "DESC"];
+  const orders = ["ASC", "DESC", 'asc', 'desc'];
 
   if (!columns.includes(sort_by) && sort_by) {
     return Promise.reject({
@@ -84,7 +86,6 @@ const fetchArticleData = async (article_id) => {
 
   return rows[0];
 };
-
 const fetchArticleComments = (article_id) => {
   return fetchArticleData(article_id)
     .then(() => {

@@ -6,6 +6,11 @@ const postComment = async (req, res, next) => {
     const { article_id } = req.params;
     const { body, username } = req.body;
 
+
+    if (!body || !username) {
+      return next({ status: 400, message: "Bad Request" });
+    }
+
     await validNumber(article_id);
 
     const comment = await postCommentToArticle(username, body, article_id);
